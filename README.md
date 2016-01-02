@@ -25,7 +25,7 @@ The following files are required in current working directory. I have not includ
     - A language-specific XML file of emoji annotations from [the Unicode CLDR](http://unicode.org/repos/cldr/tags/latest/common/annotations/)
 - Thesaurus
     - Gary Ward's [Moby Thesaurus](http://icon.shef.ac.uk/Moby/mthes.html) **OR**
-    - A thesaurus with entries separated by newlines. Entries should be in the following format:
+    - A thesaurus with entries separated by carriage returns. Entries should be in the following format:
         - *word*,*synonym*,*synonym*,*snyonym*,...
 - Word-frequency list
     - count_1w.txt from [Peter Norvig](http://norvig.com/ngrams/) **OR**
