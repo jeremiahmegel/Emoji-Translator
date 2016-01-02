@@ -36,9 +36,9 @@ type Annotation = String
 type Synonyms = [Set.Set String]
 type Score = Double
 
-getAssociations :: IO [([Annotation], [Emoji])]
-getAssociations = do
-	contents <- readFile "en.xml"
+getAssociations :: String -> IO [([Annotation], [Emoji])]
+getAssociations filename = do
+	contents <- readFile filename
 	return $
 		map
 			(\ x ->
@@ -72,9 +72,9 @@ getAssociations = do
 		readEmoji (c : cs) =
 			[c] : readEmoji cs
 
-getNames :: IO (Map.Map Char String)
-getNames = do
-	contents <- readFile "allkeys_CLDR.txt"
+getNames :: String -> IO (Map.Map Char String)
+getNames filename = do
+	contents <- readFile filename
 	return $
 		foldr
 			(\ l acc ->
@@ -94,9 +94,9 @@ getNames = do
 				$
 				lines contents
 
-getThesaurus :: IO (Map.Map String [String])
-getThesaurus = do
-	contents <- readFile "mobythes.aur"
+getThesaurus :: String -> IO (Map.Map String [String])
+getThesaurus filename = do
+	contents <- readFile filename
 	return $
 		foldr
 			(\ (w : ss) acc ->
@@ -107,60 +107,57 @@ getThesaurus = do
 			map (splitOn ",") $
 				splitOn "\r" $ map toLower contents
 
-getFreq :: IO (Map.Map String Double)
-getFreq =
-	fmap
-		(\ contents ->
-			let
-				(m, (most, least)) =
-					(
-						foldr
-							(\ l (m, (most, least)) ->
-								let
-									(w, _ : n) =
-										span (/= '\t') l
-									in
+getFreq :: String -> IO (Map.Map String Double)
+getFreq filename = do
+	contents <- readFile filename
+	return $
+		let
+			(m, (most, least)) =
+				(
+					foldr
+						(\ l (m, (most, least)) ->
+							let
+								(w, _ : n) =
+									span (/= '\t') l
+								in
+								(
+									Map.insert w (read n) m
+									,
 									(
-										Map.insert w (read n) m
-										,
-										(
-											max most $ read n,
-											min least $ read n
-										)
+										max most $ read n,
+										min least $ read n
 									)
-							)
-							(
-								Map.empty
-								,
-								(0, maxBound :: Int)
-							)
-							$
-							lines contents
-					)
-				in
-				Map.map
-					(\ x ->
-						1 / (fromIntegral $
-							2 ^ (
-								(floor $ logBase 2 $
-									fromIntegral most / fromIntegral least
 								)
-								-
-								(floor $ logBase 2 $
-									fromIntegral most / fromIntegral x
-								)
-								+ 1
+						)
+						(
+							Map.empty
+							,
+							(0, maxBound :: Int)
+						)
+						$
+						lines contents
+				)
+			in
+			Map.map
+				(\ x ->
+					1 / (fromIntegral $
+						2 ^ (
+							(floor $ logBase 2 $
+								fromIntegral most / fromIntegral least
 							)
+							-
+							(floor $ logBase 2 $
+								fromIntegral most / fromIntegral x
+							)
+							+ 1
 						)
 					)
-					m
-		)
-		$
-		readFile "count_1w.txt"
+				)
+				m
 
-getInflections :: IO (Map.Map String (Set.Set String))
-getInflections = do
-	contents <- readFile "2of12id.txt"
+getInflections :: String -> IO (Map.Map String (Set.Set String))
+getInflections filename = do
+	contents <- readFile filename
 	return $
 		foldr
 			(\ l m ->
@@ -387,11 +384,11 @@ output n =
 	filter ((> 0) . snd)
 
 main = do
-	t <- getThesaurus
-	a <- getAssociations
-	n <- getNames
-	f <- getFreq
-	i <- getInflections
+	t <- getThesaurus "mobythes.aur"
+	a <- getAssociations "en.xml"
+	n <- getNames "allkeys_CLDR.txt"
+	f <- getFreq "count_1w.txt"
+	i <- getInflections "2of12id.txt"
 	text <- getContents
 	putStrLn $ output n $ analyze t a f i text
 
