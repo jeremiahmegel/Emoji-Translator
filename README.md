@@ -55,7 +55,7 @@ The program outputs all emoji with a score greater than 0 (with their names and 
 I don't actually have the time to implement any of these changes, but I would if I could!
 
 - Figure out why the program takes up multiple gigabytes of RAM, and reduce its memory impact.
-- Tweak to formulas to produce more relevant results.
+- Tweak the formulas to produce more relevant results.
 - Reduce score-inflation by synonymous annotations.
 
 ## License
