@@ -22,14 +22,12 @@ import Data.Function (on)
 import Data.List (concat, dropWhileEnd, intersect, intersperse, sortBy)
 import Data.List.Split (splitOn)
 import Data.List.Unique (count)
-	-- cabal install Unique
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Set as Set
 import Numeric (readHex)
 import System.IO (getContents)
 import Text.XML.Light (Element(..), QName(..), cdData, elContent, findAttr, findChild, onlyElems, onlyText, parseXMLDoc)
-	-- cabal install xml
 
 type Emoji = String
 type Annotation = String
