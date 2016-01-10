@@ -40,11 +40,9 @@ The following files are required in current working directory. I have not includ
 
 ## Running
 
-You will need to install certain modules via *cabal install*; they are noted in the imports section of the code.
-
 Provide the input text via stdin.
 
-For whatever reason, this program takes up multiple gigabytes of RAM. By default, Haskell assigns compiled programs ~8MB of stack space. For this reason, the program will need to be run via *runhaskell* or *ghci*.
+For whatever reason, this program takes up multiple gigabytes of RAM. By default, Haskell assigns compiled programs ~8MB of stack space. For this reason, the program will need to be run via `runhaskell` or `ghci`.
 
 ## Output
 
